@@ -23,64 +23,63 @@ if (localStorage.getItem("token") == null) {
 
 // --------------------------------------------------获取用户信息
 // 查接口文档
-$.ajax({
-    url: "http://ajax.frontend.itheima.net/my/userinfo",
-    // type:"get",  默认就是get
+function getInfo() {
+    $.ajax({
+        url: "/my/userinfo",
+        // type:"get",  默认就是get
 
-    // 语法设置请求头 ：带上token值；
-    headers: {
-        Authorization: localStorage.getItem("token")
-    },
-    success: function(res) {
-        // 成功的时候
-        if (res.status == 0) {
-            // 名字：如果有昵称就显示昵称，若没有显示用户名；
-            var name = res.data.nickname || res.data.username;
-            $(".username").html(name);
+        // // 语法设置请求头 ：带上token值；
+        // headers: {
+        //     Authorization: localStorage.getItem("token")
+        // },
+        success: function(res) {
+            // 成功的时候
+            if (res.status == 0) {
+                // 名字：如果有昵称就显示昵称，若没有显示用户名；
+                var name = res.data.nickname || res.data.username;
+                $(".username").html(name);
 
-            // 头像：如果有头像地址显示图片，显示头像！ 
-            if (res.data.user_pic) {
-                $(".layui-nav-img").show().attr("src", res.data.user_pic);
-                $(".avatar").hide();
+                // 头像：如果有头像地址显示图片，显示头像！ 
+                if (res.data.user_pic) {
+                    $(".layui-nav-img").show().attr("src", res.data.user_pic);
+                    $(".avatar").hide();
+                }
+                //       如果没有，截取名字第一个字符，大写！显示在avatar盒子内
+                else {
+                    // 截取名字第一个字符
+                    var first = name.substr(0, 1);
+                    // 大写：中文没有，有肯能是英文开头；
+                    first = first.toUpperCase();
+
+                    $(".layui-nav-img").hide();
+                    $(".avatar").show().html(first).css("display", "inline-block");
+                }
             }
-            //       如果没有，截取名字第一个字符，大写！显示在avatar盒子内
-            else {
-                // 截取名字第一个字符
-                var first = name.substr(0, 1);
-                // 大写：中文没有，有肯能是英文开头；
-                first = first.toUpperCase();
-
-                $(".layui-nav-img").hide();
-                $(".avatar").show().html(first).css("display", "inline-block");
-            }
-        }
 
 
 
-    },
+        },
+
+        //   ******长时间不操作在刷新就会 token就会过期 就返回登录页   只要长时间不动，**************************
 
 
-    //   ******长时间不操作在刷新就会 token就会过期 就返回登录页   只要长时间不动，**************************
+        // 发出请求，接受后台返回数据，无论成功失败！
+        // complete: function(xhr) {
+        //     // xhr: 原生xhr对象可以使用
+        //     // xhr.responseJSON  对象  ====>   JSON.parse(xhr.responseText)
+        //     // xhr.responseText  JSON格式字符串
+        //     var obj = JSON.parse(xhr.responseText);
 
+        //     // 返回字段就是这个样子呢？后台返回的！不是前端定！
+        //     if (obj.status == 1) {
+        //         localStorage.removeItem("token");
+        //         location.href = "../login.html";
+        //     }
+        // }
 
-    // 发出请求，接受后台返回数据，无论成功失败！
-    complete: function(xhr) {
-        // xhr: 原生xhr对象可以使用
-        // xhr.responseJSON  对象  ====>   JSON.parse(xhr.responseText)
-        // xhr.responseText  JSON格式字符串
-        var obj = JSON.parse(xhr.responseText);
-
-        // 返回字段就是这个样子呢？后台返回的！不是前端定！
-        if (obj.status == 1) {
-            localStorage.removeItem("token");
-            location.href = "../login.html";
-        }
-    }
-
-
-
-
-})
+    })
+};
+getInfo();
 
 
 

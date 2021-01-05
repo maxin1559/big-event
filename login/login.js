@@ -41,7 +41,7 @@ $("#register form").on("submit", function(e) {
 
     // 3.提交数据：去哪看？接口文档！
     $.ajax({
-        url: "http://ajax.frontend.itheima.net/api/reguser",
+        url: "/api/reguser",
         type: "post",
         data: params,
         success: function(res) {
@@ -76,7 +76,7 @@ $("#login form").on("submit", function(e) {
 
     // 3.提交数据：去哪看？接口文档！
     $.ajax({
-        url: "http://ajax.frontend.itheima.net/api/login",
+        url: "/api/login",
         type: "post",
         data: params,
         success: function(res) {
